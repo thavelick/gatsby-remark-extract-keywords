@@ -1,5 +1,4 @@
-const natural = require('natural');
-const TfIdf = natural.TfIdf;
+const rake = require('rapid-automated-keyword-extraction').default;
 
 const blacklistKeywords = (keywords, blacklist) => {
     if (typeof blacklist === 'function') {
@@ -13,13 +12,11 @@ const blacklistKeywords = (keywords, blacklist) => {
     return keywords.filter(term => !blacklisted.includes(term.toLowerCase()));
 };
 
-const getKeywords = ({ text, max, blacklist }) => {
+const getKeywords = async ({ text, max, blacklist }) => {
     let textKeywords = [];
 
-    const tfidf = new TfIdf();
-    tfidf.addDocument(text);
-
-    tfidf.listTerms(0).forEach(item => textKeywords.push(item.term));
+    const workingKeywords = await rake(text);
+    workingKeywords.forEach(item => textKeywords.push(item.term));
 
     if (blacklist) {
         textKeywords = blacklistKeywords(textKeywords, blacklist);
