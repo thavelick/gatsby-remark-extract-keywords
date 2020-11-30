@@ -15,7 +15,7 @@ const blacklistKeywords = (keywords, blacklist) => {
 const getKeywords = async ({ text, max, blacklist }) => {
     let textKeywords = [];
 
-    const workingKeywords = await rake(text);
+    const workingKeywords = await rake(text, '/dev/null');
     workingKeywords.forEach(item => textKeywords.push(item.term));
 
     if (blacklist) {
